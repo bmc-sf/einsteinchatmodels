@@ -15,7 +15,7 @@ app.get('/', (req, res) => {
 
 app.post('/submit', (req, res) => {
     const userPrompt = req.body.prompt; // Get the prompt from the request body
-    let myMsg = 'You clicked Submit: ' + userPrompt;
+    let myMsg = userPrompt;
     console.log(myMsg);
 
     // Respond with a JSON object
