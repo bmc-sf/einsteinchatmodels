@@ -1,1 +1,43 @@
-asdf
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Einstein Trust Layer</title>
+  <link rel="stylesheet" type="text/css" href="/style.css">
+</head>
+<body>
+  <h2>Welcome to Einstein Trust Laye & Models API!</h2>
+  <br>
+  <form id="promptForm">
+    <textarea name="prompt" placeholder="Enter prompt here" required rows="4" cols="50"></textarea>
+    <br>
+    <button type="submit">Submit</button>
+  </form>
+  <br>
+  <textarea id="response1" name="response" rows="4" cols="50" readonly>
+    Response here
+  </textarea>
+
+  <script>
+    document.getElementById('promptForm').addEventListener('submit', function(event) {
+      event.preventDefault(); // Prevent the default form submission
+
+      const prompt = this.prompt.value;
+
+      // Send the prompt to the server using fetch
+      fetch('/submit', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ prompt: prompt })
+      })
+      .then(response => response.json())
+      .then(data => {
+        // Update the textarea with the response
+        document.getElementById('response1').value = data.response;
+      })
+      .catch(error => console.error('Error:', error));
+    });
+  </script>
+</body>
+</html>
