@@ -1,4 +1,3 @@
-
 /* styles.css */
 
 body {
@@ -6,13 +5,13 @@ body {
 }
 
 textarea {
-  width: 100%; /* Make the textarea take the full width */
+  width: 50%; /* Make the textarea take the full width */
   margin-top: 10px; /* Add some space above the textarea */
 }
 
 #response1 {
-  background-color: gray; /* Set the background color to gray */
-  color: white; /* Optional: set text color to white for better contrast */
+  background-color: lightgray; /* Set the background color to gray */
+  color: black; /* Optional: set text color to white for better contrast */
 }
 
 
