@@ -1,1 +1,27 @@
 
+/* styles.css */
+
+body {
+  font-family: Arial, sans-serif; /* Optional: set a default font */
+}
+
+textarea {
+  width: 100%; /* Make the textarea take the full width */
+  margin-top: 10px; /* Add some space above the textarea */
+}
+
+#response1 {
+  background-color: gray; /* Set the background color to gray */
+  color: white; /* Optional: set text color to white for better contrast */
+}
+
+
+#prompt1 {
+    background-color: white;
+    text-align: left;
+    padding: 12px 20px;
+    box-sizing: border-box;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+  }
