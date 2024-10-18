@@ -21,7 +21,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.post('/submit', async (req, res) => {
   const userPrompt = req.body.prompt; // Get the prompt from the request body
-  console.log(userPrompt);
+  console.log("userPrompt: ", userPrompt);
 
   // Begin Get Access Token
   if (!my_domain || !consumer_key || !consumer_secret) {        
@@ -40,7 +40,7 @@ app.post('/submit', async (req, res) => {
       });
       
       accessToken = response.data.access_token; // Declare and assign accessToken here
-      console.log(accessToken);
+      console.log("accessToke: ", accessToken);
   } catch (error) {        
       console.error(error);        
       return res.status(500).send('Error requesting token');    
@@ -49,7 +49,7 @@ app.post('/submit', async (req, res) => {
 
   // Begin Get Response
   const generationURL = `https://api.salesforce.com/einstein/platform/v1/models/${modelName}/generations`; 
-  console.log("Generation URL:", generationURL);
+  console.log("generationURL:", generationURL);
   try {
       // Set input Prompt var 
       const data = {
@@ -66,9 +66,11 @@ app.post('/submit', async (req, res) => {
           }        
       });
       
-      console.log('Response:', response.data);
+      //console.log('Response:', response.data);
       const generatedResponse = response.data.generation.generatedText;
-      console.log('Generated Text:', generatedResponse);
+      console.log('generatedResponse:', generatedResponse);
+      console.log('Generation contentQuality: ', JSON.stringify(response.data.generation.contentQuality, null, 2));
+
       //return res.status(200).json(response.data); // Send the response here
       return res.status(200).json({
         response: {
