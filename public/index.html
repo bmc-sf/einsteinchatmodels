@@ -1,11 +1,53 @@
+<!--
+  Oct-23:  v1.0 - Working Baseline
+-->
 <!DOCTYPE html>
 <html>
 <head>
   <title>Einstein Trust Layer</title>
   <link rel="stylesheet" type="text/css" href="/style.css">
+  <style>
+    body {
+      display: flex;
+      justify-content: space-between;
+      margin: 0;
+      overflow-x: hidden;
+    }
+    .left-column {
+      flex: 0 0 70%; /* 70% width */
+      padding: 20px; /* Add padding for spacing */
+    }
+    .right-column {
+      flex: 0 0 30%; /* 30% width */
+      display: flex;
+      align-items: left; /* Center vertically */
+      justify-content: left; /* Center horizontally */
+      padding: 20px; /* Add padding for spacing */
+    }
+    .header {
+      display: flex;
+      align-items: center;
+    }
+    .logo {
+      width: 50px; /* Set to your desired width */
+      height: auto; /* Maintain aspect ratio */
+      margin-left: 20px; /* Adjust as needed for spacing */
+    }
+    .large-logo {
+      width: 100%; /* Set to your desired larger size */
+      height: auto; /* Maintain aspect ratio */
+      margin-left: -60%;
+    }
+  </style>
 </head>
 <body>
-  <h2>Welcome to Einstein Trust Layer & Models API!</h2>
+
+  <div class="left-column">
+  <div class="header">
+      <h2>Welcome to Einstein Trust Layer & Models API!</h2>
+      <img src="https://www.salesforceairesearch.com/images/sf-logo.png" alt="Logo" class="logo"> <!-- Replace with your logo's path -->
+     
+  </div>
   <br>
   <form id="promptForm">
     <textarea name="prompt" placeholder="Enter prompt here" required rows="4" cols="50"></textarea>
@@ -16,6 +58,11 @@
   <textarea id="response1" name="response" rows="8" cols="50" readonly>
     Response here
   </textarea>
+</div>
+
+<div class="right-column">
+  <img src="https://wp.salesforce.com/en-us/wp-content/uploads/sites/4/2024/09/img-agent-1.webp" alt="AgentForceLogo" class="large-logo">
+</div>
 
   <script>
     document.getElementById('promptForm').addEventListener('submit', function(event) {
