@@ -1,5 +1,5 @@
 <!--
-  Oct-23:  v1.0 - Working Baseline
+  Oct-23:  v1.1 - Added Tabs & Log Data
 -->
 <!DOCTYPE html>
 <html>
@@ -38,31 +38,78 @@
       height: auto; /* Maintain aspect ratio */
       margin-left: -60%;
     }
+    /* Tab styling */
+    .tab {
+      overflow: hidden;
+      width: 70%;
+      margine: 0 auto;
+      border-bottom: 1px solid #ccc;
+    }
+    .tab button {
+      background-color: inherit;
+      border: none;
+      border-radius: 20px;
+      outline: none;
+      cursor: pointer;
+      padding: 14px 16px;
+      transition: 0.3s;
+      font-size: 17px;
+    }
+    .tab button:hover {
+      background-color: #ddd;
+    }
+    .tab button.active {
+      background-color: #ccc;
+    }
+    .tabcontent {
+      display: none;
+      padding: 6px 12px;
+      border: none;
+    }
+    .tabcontent.active {
+      display: block;
+    }
   </style>
 </head>
 <body>
 
   <div class="left-column">
-  <div class="header">
+    <div class="header">
       <h2>Welcome to Einstein Trust Layer & Models API!</h2>
       <img src="https://www.salesforceairesearch.com/images/sf-logo.png" alt="Logo" class="logo"> <!-- Replace with your logo's path -->
-     
-  </div>
-  <br>
-  <form id="promptForm">
-    <textarea name="prompt" placeholder="Enter prompt here" required rows="4" cols="50"></textarea>
+    </div>
     <br>
-    <button type="submit">Submit</button>
-  </form>
-  <br>
-  <textarea id="response1" name="response" rows="8" cols="50" readonly>
-    Response here
-  </textarea>
-</div>
+    <form id="promptForm">
+      <textarea name="prompt" placeholder="Enter prompt here" required rows="4" cols="50"></textarea>
+      <br>
+      <button type="submit">Submit</button>
+    </form>
+    <br>
 
-<div class="right-column">
-  <img src="https://wp.salesforce.com/en-us/wp-content/uploads/sites/4/2024/09/img-agent-1.webp" alt="AgentForceLogo" class="large-logo">
-</div>
+    <!-- Tab structure for Textareas -->
+    <div class="tab">
+      <button class="tablinks active" onclick="openTab(event, 'ResponseTab')">Response</button>
+      <button class="tablinks" onclick="openTab(event, 'LogTab')">Log</button>
+    </div>
+
+    <!-- Response Tab Content -->
+    <div id="ResponseTab" class="tabcontent active">
+      <textarea id="response1" name="response" rows="8" cols="50" readonly>
+        Response here
+      </textarea>
+    </div>
+
+    <!-- Log Tab Content -->
+    <div id="LogTab" class="tabcontent">
+      <textarea id="responselog1" name="responselog" rows="8" cols="50" readonly>
+        Log information will appear here.
+      </textarea>
+    </div>
+  </div>
+
+  <div class="right-column">
+    <img src="https://wp.salesforce.com/en-us/wp-content/uploads/sites/4/2024/09/img-agent-1.webp" alt="AgentForceLogo" class="large-logo">
+  </div>
 
   <script>
     document.getElementById('promptForm').addEventListener('submit', function(event) {
@@ -82,9 +129,28 @@
       .then(data => {
         // Update the textarea with the response
         document.getElementById('response1').value = data.response.data.generation.generatedText;
+        // Log some information
+        document.getElementById('responselog1').value = JSON.stringify(data.response.data.generation.contentQuality, null, 2);;
       })
-      .catch(error => console.error('Error:', error));
+      .catch(error => {
+        console.error('Error:', error);
+        document.getElementById('logTextArea').value = "Error: " + error;
+      });
     });
+
+    function openTab(evt, tabName) {
+      var i, tabcontent, tablinks;
+      tabcontent = document.getElementsByClassName("tabcontent");
+      for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none"; // Hide all tab contents
+      }
+      tablinks = document.getElementsByClassName("tablinks");
+      for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].className = tablinks[i].className.replace(" active", ""); // Remove active class from all tabs
+      }
+      document.getElementById(tabName).style.display = "block"; // Show the current tab
+      evt.currentTarget.className += " active"; // Add active class to the clicked tab
+    }
   </script>
 </body>
 </html>

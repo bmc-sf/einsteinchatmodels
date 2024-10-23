@@ -1,5 +1,5 @@
 /*
-Oct-23:  v1.0 - Working Baseline
+Oct-23:  v1.1 - Added Tabs & Log Data
 */
 
 const express = require('express');
@@ -80,7 +80,8 @@ app.post('/submit', async (req, res) => {
         response: {
             data: {
                 generation: {
-                    generatedText: generatedResponse // 
+                    generatedText: generatedResponse, // 
+                    contentQuality: response.data.generation.contentQuality
                 }
             }
           }
