@@ -1,5 +1,6 @@
-/* 
-Oct-23:  v1.1 - Added Tabs & Log Data
+/*
+bmccall:  Salesfore Einstein Models API
+Updated:  Oct-24-2024 - v1.12 - Added Footer & Logo
 */
 
 /* styles.css */
@@ -27,3 +28,21 @@ textarea {
     border-radius: 4px;
     font-size: 16px;
   }
+
+  /* Footer styling */
+.footer {
+  display: flex;
+  justify-content: space-between;
+  background-color: #cce6ff; /* Optional: change background color */
+  padding: 10px 20px;
+  position: fixed;
+  width: 100%;
+  bottom: 0;
+  justify-content: center;
+}
+
+.footer-logo {
+  width: 50px; /* Adjust the size of the logo */
+  height: auto; /* Maintain aspect ratio */
+}
+
