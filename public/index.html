@@ -1,6 +1,6 @@
 <!--
   bmccall:  Salesfore Einstein Models API
-  Updated:  Oct-24-2024 - v1.12 - Added Footer & Logo
+  Updated:  Oct-25-2024 - v1.14 - Added Model Selection & Logged Model and Tokens Used
 -->
 <!DOCTYPE html>
 <html>
@@ -44,7 +44,6 @@
     .tab {
       overflow: hidden;
       width: 50%;
-      margine: 0 auto;
       border-bottom: 1px solid #ccc;
     }
     .tab button {
@@ -84,7 +83,19 @@
     <form id="promptForm">
       <textarea name="prompt" placeholder="Enter prompt here" required rows="4" cols="50"></textarea>
       <br>
+      <label for="model">Model:</label>
+      <select name="model" id="model">
+        <option value="sfdc_ai__DefaultGPT4Omni">OpenAI GPT 4 Omni (GPT-4o)</option>
+        <option value="sfdc_ai__DefaultOpenAIGPT4OmniMini">OpenAI GPT 4 Omni Mini (GPT-4o mini)</option>
+        <option value="sfdc_ai__DefaultOpenAIGPT4">OpenAI GPT 4</option>
+        <option value="sfdc_ai__DefaultOpenAIGPT4Turbo">OpenAI GPT 4 Turbo</option>
+        <option value="sfdc_ai__DefaultBedrockAnthropicClaude3Haiku">Anthropic Claude 3 Haiku on Amazon (Salesforce)</option>
+    </select>
+    <br><br>
+    <div class="submit-button">
       <button type="submit">Submit</button>
+    </div>
+      
     </form>
     <br>
 
@@ -118,6 +129,7 @@
       event.preventDefault(); // Prevent the default form submission
 
       const prompt = this.prompt.value;
+      const model = this.model.value;
 
       // Send the prompt to the server using fetch
       fetch('/submit', {
@@ -125,14 +137,20 @@
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ prompt: prompt })
+        body: JSON.stringify({ prompt: prompt, model: model })
       })
       .then(response => response.json())
       .then(data => {
         // Update the textarea with the response
         document.getElementById('response1').value = data.response.data.generation.generatedText;
         // Log some information
-        document.getElementById('responselog1').value = JSON.stringify(data.response.data.generation.contentQuality, null, 2);;
+        //document.getElementById('responselog1').value = JSON.stringify(data.response.data.generation.contentQuality, null, 2);;
+        //const responselogResult = JSON.stringify(data.response.data.generation.contentQuality, null, 2);
+
+        const responselogResult = `userModel: ${data.response.data.parameters.userModel}\n\n` +
+                      `totalTokens: ${data.response.data.parameters.totalTokens}\n\n` +
+                      `contentQuality: ${JSON.stringify(data.response.data.generation.contentQuality, null, 2)}`;
+        document.getElementById('responselog1').value = responselogResult;
       })
       .catch(error => {
         console.error('Error:', error);
@@ -157,8 +175,8 @@
 
   <!-- Footer Section -->
 <div class="footer">
-    <p>Salesforce Technical Architects 2024</p>
-    <img src="./TA_Pin_Transparent.png" alt="Footer Logo" class="footer-logo"> <!-- Replace with your logo's path -->
+    <p>Salesforce Technical Architects Oct-25-2024 - bmccall  </p>
+    <img src="./TA_Pin_Transparent.png" alt="Footer Logo" class="footer-logo"> 
 </div>
 </body>
 </html>
