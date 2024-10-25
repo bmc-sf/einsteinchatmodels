@@ -1,6 +1,6 @@
 /*
 bmccall:  Salesfore Einstein Models API
-Updated:  Oct-24-2024 - v1.12 - Added Footer & Logo
+Updated:  Oct-25-2024 - v1.14 - Added Model Selection & Logged Model and Tokens Used
 */
 
 const express = require('express');
@@ -18,6 +18,7 @@ const my_domain = 'bmc-dc-byom-demo.my.salesforce.com';
 const consumer_key = '3MVG9VTfpJmxg1yiAONCwysuOvIf6tHvSlviFwE6LMJYM58yMzjcI_6wlpPQzlctHqaJk2WKH6MJJwC5h3OKf';
 const consumer_secret = '28988A17384F19A64A60CA0FF9F6B9ED2F5D91ADB81E2D59FA9D1EAC8AA3A732';
 const modelName = 'sfdc_ai__DefaultGPT4Omni';
+//const modelName = 'sfdc_ai__DefaultOpenAIGPT4OmniMini';
 // --- Token ---
 
 app.use(express.static('public'));
@@ -26,7 +27,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.post('/submit', async (req, res) => {
   const userPrompt = req.body.prompt; // Get the prompt from the request body
+  const userModel = req.body.model;
   console.log("userPrompt: ", userPrompt);
+  console.log("userModel: ", userModel);
 
   // Begin Get Access Token
   if (!my_domain || !consumer_key || !consumer_secret) {        
@@ -45,7 +48,7 @@ app.post('/submit', async (req, res) => {
       });
       
       accessToken = response.data.access_token; // Declare and assign accessToken here
-      console.log("accessToke: ", accessToken);
+      //console.log("accessToke: ", accessToken);
   } catch (error) {        
       console.error(error);        
       return res.status(500).send('Error requesting token');    
@@ -53,7 +56,7 @@ app.post('/submit', async (req, res) => {
   // END Get Access Token
 
   // Begin Get Response
-  const generationURL = `https://api.salesforce.com/einstein/platform/v1/models/${modelName}/generations`; 
+  const generationURL = `https://api.salesforce.com/einstein/platform/v1/models/${userModel}/generations`; 
   console.log("generationURL:", generationURL);
   try {
       // Set input Prompt var 
@@ -75,25 +78,32 @@ app.post('/submit', async (req, res) => {
       const generatedResponse = response.data.generation.generatedText;
       console.log('generatedResponse:', generatedResponse);
       console.log('Generation contentQuality: ', JSON.stringify(response.data.generation.contentQuality, null, 2));
-
+      console.log('totalTokens', response.data.parameters.usage.total_tokens);
+      console.log('userModel', response.data.parameters.model);
       //return res.status(200).json(response.data); // Send the response here
       return res.status(200).json({
         response: {
             data: {
                 generation: {
-                    generatedText: generatedResponse, // 
-                    contentQuality: response.data.generation.contentQuality
+                    generatedText: generatedResponse,
+                    contentQuality: response.data.generation.contentQuality,
+                },
+                parameters:{
+                    totalTokens: response.data.parameters.usage.total_tokens,
+                    userModel: response.data.parameters.model
                 }
             }
           }
-        });
-    
+        }
+        );
+        
       
   } catch (error) {        
       console.error(error);        
       return res.status(500).send('Error requesting generation');    
   }
   // END Get Response
+   
 });
 
 
