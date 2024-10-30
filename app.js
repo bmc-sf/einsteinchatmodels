@@ -1,6 +1,6 @@
 /*
 bmccall:  Salesfore Einstein Models API
-Updated:  Oct-25-2024 - v1.14 - Added Model Selection & Logged Model and Tokens Used
+Updated:  Oct-30-2024 - v1.15 - Added Reqest Tab and Data
 */
 
 const express = require('express');
@@ -75,6 +75,7 @@ app.post('/submit', async (req, res) => {
       });
       
       //console.log('Response:', response.data);
+  
       const generatedResponse = response.data.generation.generatedText;
       console.log('generatedResponse:', generatedResponse);
       console.log('Generation contentQuality: ', JSON.stringify(response.data.generation.contentQuality, null, 2));
@@ -91,6 +92,9 @@ app.post('/submit', async (req, res) => {
                 parameters:{
                     totalTokens: response.data.parameters.usage.total_tokens,
                     userModel: response.data.parameters.model
+                },
+                request:{
+                    generationURL: generationURL,
                 }
             }
           }
