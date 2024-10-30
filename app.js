@@ -1,6 +1,6 @@
 /*
 bmccall:  Salesfore Einstein Models API
-Updated:  Oct-30-2024 - v1.15 - Added Reqest Tab and Data
+Updated:  Oct-30-2024 - v1.15 - Added Request Tab and Data
 */
 
 const express = require('express');
