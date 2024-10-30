@@ -4,19 +4,104 @@ Updated:  Oct-30-2024 - v1.15 - Added Request Tab and Data
 */
 
 /* styles.css */
+
 body {
+  display: flex;
+  justify-content: space-between;
+  margin: 0;
+  overflow-x: hidden;
   font-family: Arial, sans-serif; 
 }
 
+:root {
+  --left-column-width: 70%;
+}
+
+.left-column {
+  flex: 0 0 70%; /* 70% width */
+  padding: 20px; /* Add padding for spacing */
+  box-sizing: border-box;
+  position: relative;
+}
+.right-column {
+  flex: 0 0 30%; /* 30% width */
+  display: flex;
+  align-items: left; /* Center vertically */
+  justify-content: left; /* Center horizontally */
+  padding: 20px; /* Add padding for spacing */
+}
+.header {
+  display: flex;
+  align-items: center;
+}
+.logo {
+  width: 50px; /* Set to your desired width */
+  height: auto; /* Maintain aspect ratio */
+  margin-left: 20px; /* Adjust as needed for spacing */
+}
+.large-logo {
+  width: 100%; /* Set to your desired larger size */
+  height: auto; /* Maintain aspect ratio */
+  object-fit: contain;
+  margin-left: -60%;
+}
+/* Tab styling */
+.tab {
+  background-color: #e6e6e6;
+  overflow: hidden;
+  width: 70%; 
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px; 
+  padding: 0px;
+  box-sizing: border-box;
+}
+.tab button {
+  background-color: inherit;
+  border: none;
+  border-radius: 10px;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  transition: 0.3s;
+  font-size: 17px;
+  height: calc(100% - 20px);
+}
+.tab button:hover {
+  background-color: #ddd;
+}
+.tab button.active {
+  background-color: #ccc;
+}
+.tabcontent {
+  background-color: #e6e6e6;
+  display: none;
+  padding: 6px 12px;
+  width: 70%;
+  border: none;
+  box-sizing: border-box;
+}
+.tabcontent.active {
+  display: block;
+}
+
 textarea {
-  width: 50%; 
-  margin-top: 10px; 
+  width: 100%;
+  margin-top: 10px;
+  background-color: transparent;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  text-align: left;
+}
+
+.prompt-textarea{
+  width: 70%;
 }
 
 .submit-button{ 
   text-align: center;
   margin-top: 5px;
-  margin-left: 25%;
+  margin-left: calc(var(--left-column-width) * 0.25);
 }
 
 .submit-button button {
