@@ -1,6 +1,6 @@
 <!--
   bmccall:  Salesfore Einstein Models API
-  Updated:  Oct-25-2024 - v1.14 - Added Model Selection & Logged Model and Tokens Used
+  Updated:  Oct-30-2024 - v1.15 - Added Reqest Tab and Data
 -->
 <!DOCTYPE html>
 <html>
@@ -103,6 +103,7 @@
     <div class="tab">
       <button class="tablinks active" onclick="openTab(event, 'ResponseTab')">Response</button>
       <button class="tablinks" onclick="openTab(event, 'LogTab')">Log</button>
+      <button class="tablinks" onclick="openTab(event, 'RequestTab')">Request</button>
     </div>
 
     <!-- Response Tab Content -->
@@ -116,6 +117,13 @@
     <div id="LogTab" class="tabcontent">
       <textarea id="responselog1" name="responselog" rows="8" cols="50" readonly>
         Log information will appear here.
+      </textarea>
+    </div>
+
+    <!-- Request Tab Content -->
+    <div id="RequestTab" class="tabcontent">
+      <textarea id="responseRequest1" name="responserequest" rows="8" cols="50" readonly>
+        Request details will appear here.
       </textarea>
     </div>
   </div>
@@ -141,16 +149,22 @@
       })
       .then(response => response.json())
       .then(data => {
-        // Update the textarea with the response
+        // Response Tab - Display Response
         document.getElementById('response1').value = data.response.data.generation.generatedText;
         // Log some information
         //document.getElementById('responselog1').value = JSON.stringify(data.response.data.generation.contentQuality, null, 2);;
         //const responselogResult = JSON.stringify(data.response.data.generation.contentQuality, null, 2);
 
+        // Log Tab - Display Log Data
         const responselogResult = `userModel: ${data.response.data.parameters.userModel}\n\n` +
                       `totalTokens: ${data.response.data.parameters.totalTokens}\n\n` +
                       `contentQuality: ${JSON.stringify(data.response.data.generation.contentQuality, null, 2)}`;
         document.getElementById('responselog1').value = responselogResult;
+
+        // Request Tab - Display POST Request
+        //document.getElementById('responseRequest1').value = 'Request URL:  ${data.response.data.request.generationURL}';
+        const requestBody = JSON.stringify({ prompt: prompt, model: model }, null, 2); // Format the body for display
+        document.getElementById('responseRequest1').value = `Request URL: ${data.response.data.request.generationURL}\n\nRequest Body:\n${requestBody}`;
       })
       .catch(error => {
         console.error('Error:', error);
