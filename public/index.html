@@ -1,76 +1,12 @@
 <!--
   bmccall:  Salesfore Einstein Models API
-  Updated:  Oct-30-2024 - v1.15 - Added Reqest Tab and Data
+  Updated:  Oct-30-2024 - v1.15 - Added Request Tab and Data
 -->
 <!DOCTYPE html>
 <html>
 <head>
   <title>Einstein Trust Layer</title>
   <link rel="stylesheet" type="text/css" href="/style.css">
-  <style>
-    body {
-      display: flex;
-      justify-content: space-between;
-      margin: 0;
-      overflow-x: hidden;
-    }
-    .left-column {
-      flex: 0 0 70%; /* 70% width */
-      padding: 20px; /* Add padding for spacing */
-    }
-    .right-column {
-      flex: 0 0 30%; /* 30% width */
-      display: flex;
-      align-items: left; /* Center vertically */
-      justify-content: left; /* Center horizontally */
-      padding: 20px; /* Add padding for spacing */
-    }
-    .header {
-      display: flex;
-      align-items: center;
-    }
-    .logo {
-      width: 50px; /* Set to your desired width */
-      height: auto; /* Maintain aspect ratio */
-      margin-left: 20px; /* Adjust as needed for spacing */
-    }
-    .large-logo {
-      width: 100%; /* Set to your desired larger size */
-      height: auto; /* Maintain aspect ratio */
-      object-fit: contain;
-      margin-left: -60%;
-    }
-    /* Tab styling */
-    .tab {
-      overflow: hidden;
-      width: 50%;
-      border-bottom: 1px solid #ccc;
-    }
-    .tab button {
-      background-color: inherit;
-      border: none;
-      border-radius: 20px;
-      outline: none;
-      cursor: pointer;
-      padding: 14px 16px;
-      transition: 0.3s;
-      font-size: 17px;
-    }
-    .tab button:hover {
-      background-color: #ddd;
-    }
-    .tab button.active {
-      background-color: #ccc;
-    }
-    .tabcontent {
-      display: none;
-      padding: 6px 12px;
-      border: none;
-    }
-    .tabcontent.active {
-      display: block;
-    }
-  </style>
 </head>
 <body>
 
@@ -81,7 +17,9 @@
     </div>
     <br>
     <form id="promptForm">
-      <textarea name="prompt" placeholder="Enter prompt here" required rows="4" cols="50"></textarea>
+      <div class="prompt-textarea">
+        <textarea name="prompt" placeholder="Enter prompt here" required rows="4" cols="50"></textarea>
+      </div>
       <br>
       <label for="model">Model:</label>
       <select name="model" id="model">
@@ -108,23 +46,17 @@
 
     <!-- Response Tab Content -->
     <div id="ResponseTab" class="tabcontent active">
-      <textarea id="response1" name="response" rows="8" cols="50" readonly>
-        Response here
-      </textarea>
+      <textarea id="response1" name="response" rows="10" cols="50" readonly>Response here</textarea>
     </div>
 
     <!-- Log Tab Content -->
     <div id="LogTab" class="tabcontent">
-      <textarea id="responselog1" name="responselog" rows="8" cols="50" readonly>
-        Log information will appear here.
-      </textarea>
+      <textarea id="responselog1" name="responselog" rows="10" cols="50" readonly>Log information will appear here</textarea>
     </div>
 
     <!-- Request Tab Content -->
     <div id="RequestTab" class="tabcontent">
-      <textarea id="responseRequest1" name="responserequest" rows="8" cols="50" readonly>
-        Request details will appear here.
-      </textarea>
+      <textarea id="responseRequest1" name="responserequest" rows="10" cols="50" readonly>Request details will appear here</textarea>
     </div>
   </div>
 
