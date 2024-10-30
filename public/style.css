@@ -1,6 +1,6 @@
 /*
 bmccall:  Salesfore Einstein Models API
-Updated:  Oct-30-2024 - v1.15 - Added Reqest Tab and Data
+Updated:  Oct-30-2024 - v1.15 - Added Request Tab and Data
 */
 
 /* styles.css */
@@ -32,6 +32,15 @@ textarea {
   color: black; 
 }
 
+#responselog1{
+  background-color: lightgray; 
+  color: black; 
+}
+
+#responseRequest1{
+  background-color: lightgray; 
+  color: black; 
+}
 
 #prompt1 {
     background-color: white;
