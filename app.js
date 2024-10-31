@@ -5,7 +5,7 @@ const axios = require('axios');
 require('dotenv').config(); 
 
 const hostname = '127.0.0.1';
-const port = process.env.PORT || 4043;
+const PORT = process.env.PORT || 3000;
 
 const app = express();
 
@@ -129,6 +129,6 @@ app.get('/request-token', async (req, res) => {
   );
 
 // Start the server
-app.listen(port, () => {
-    console.log(`Server is running at port ${port}`);
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
 });
