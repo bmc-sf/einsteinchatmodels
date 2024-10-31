@@ -1,5 +1,5 @@
 {
-  "name": "einsteinchat",
+  "name": "einsteinchatmodels",
   "version": "1.0.0",
   "description": "",
   "main": "app.js",
@@ -8,14 +8,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/bmc-sf/einsteinchat.git"
+    "url": "git+https://github.com/bmc-sf/einsteinchatmodels.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/bmc-sf/einsteinchat/issues"
+    "url": "https://github.com/bmc-sf/einsteinchatmodels/issues"
   },
-  "homepage": "https://github.com/bmc-sf/einsteinchat#readme",
+  "homepage": "https://github.com/bmc-sf/einsteinchatmodels#readme",
   "dependencies": {
     "axios": "^1.7.7",
     "express": "^4.21.1"

@@ -1,7 +1,3 @@
-<!--
-  bmccall:  Salesfore Einstein Models API
-  Updated:  Oct-30-2024 - v1.15 - Background Color Tab Area
--->
 <!DOCTYPE html>
 <html>
 <head>
@@ -13,7 +9,7 @@
   <div class="left-column">
     <div class="header">
       <h2>Welcome to Einstein Trust Layer & Models API!</h2>
-      <img src="https://www.salesforceairesearch.com/images/sf-logo.png" alt="Logo" class="logo"> <!-- Replace with your logo's path -->
+      <img src="https://www.salesforceairesearch.com/images/sf-logo.png" alt="Logo" class="logo">
     </div>
     <br>
     <form id="promptForm">
@@ -37,24 +33,24 @@
     </form>
     <br>
 
-    <!-- Tab structure for Textareas -->
+    <!-- Tabs -->
     <div class="tab">
       <button class="tablinks active" onclick="openTab(event, 'ResponseTab')">Response</button>
       <button class="tablinks" onclick="openTab(event, 'LogTab')">Log</button>
       <button class="tablinks" onclick="openTab(event, 'RequestTab')">Request</button>
     </div>
 
-    <!-- Response Tab Content -->
+    <!-- Response Tab -->
     <div id="ResponseTab" class="tabcontent active">
       <textarea id="response1" name="response" rows="10" cols="50" readonly>Response here</textarea>
     </div>
 
-    <!-- Log Tab Content -->
+    <!-- Log Tab -->
     <div id="LogTab" class="tabcontent">
       <textarea id="responselog1" name="responselog" rows="10" cols="50" readonly>Log information will appear here</textarea>
     </div>
 
-    <!-- Request Tab Content -->
+    <!-- Request Tab -->
     <div id="RequestTab" class="tabcontent">
       <textarea id="responseRequest1" name="responserequest" rows="10" cols="50" readonly>Request details will appear here</textarea>
     </div>
@@ -66,12 +62,12 @@
 
   <script>
     document.getElementById('promptForm').addEventListener('submit', function(event) {
-      event.preventDefault(); // Prevent the default form submission
+      event.preventDefault();
 
       const prompt = this.prompt.value;
       const model = this.model.value;
 
-      // Send the prompt to the server using fetch
+      // Send the prompt to the server
       fetch('/submit', {
         method: 'POST',
         headers: {
@@ -83,9 +79,6 @@
       .then(data => {
         // Response Tab - Display Response
         document.getElementById('response1').value = data.response.data.generation.generatedText;
-        // Log some information
-        //document.getElementById('responselog1').value = JSON.stringify(data.response.data.generation.contentQuality, null, 2);;
-        //const responselogResult = JSON.stringify(data.response.data.generation.contentQuality, null, 2);
 
         // Log Tab - Display Log Data
         const responselogResult = `userModel: ${data.response.data.parameters.userModel}\n\n` +
@@ -94,8 +87,7 @@
         document.getElementById('responselog1').value = responselogResult;
 
         // Request Tab - Display POST Request
-        //document.getElementById('responseRequest1').value = 'Request URL:  ${data.response.data.request.generationURL}';
-        const requestBody = JSON.stringify({ prompt: prompt, model: model }, null, 2); // Format the body for display
+        const requestBody = JSON.stringify({ prompt: prompt, model: model }, null, 2);
         document.getElementById('responseRequest1').value = `Request URL: ${data.response.data.request.generationURL}\n\nRequest Body:\n${requestBody}`;
       })
       .catch(error => {
@@ -108,7 +100,7 @@
       var i, tabcontent, tablinks;
       tabcontent = document.getElementsByClassName("tabcontent");
       for (i = 0; i < tabcontent.length; i++) {
-        tabcontent[i].style.display = "none"; // Hide all tab contents
+        tabcontent[i].style.display = "none"; // Hide tab contents
       }
       tablinks = document.getElementsByClassName("tablinks");
       for (i = 0; i < tablinks.length; i++) {

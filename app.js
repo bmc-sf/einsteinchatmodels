@@ -1,8 +1,3 @@
-/*
-bmccall:  Salesfore Einstein Models API
-Updated:  Oct-30-2024 - v1.15 - Background Color Tab Area
-*/
-
 const express = require('express');
 const bodyParser = require('body-parser');
 const https = require('https');
@@ -14,21 +9,21 @@ const port = 4043;  //localhost
 
 const app = express();
 
-// --- Token ---
-const my_domain = 'bmc-dc-byom-demo.my.salesforce.com';
-const consumer_key = '3MVG9VTfpJmxg1yiAONCwysuOvIf6tHvSlviFwE6LMJYM58yMzjcI_6wlpPQzlctHqaJk2WKH6MJJwC5h3OKf';
-const consumer_secret = '28988A17384F19A64A60CA0FF9F6B9ED2F5D91ADB81E2D59FA9D1EAC8AA3A732';
+// --- Domain ---
+const my_domain = 'your-domain';
+// --- Default Model ---
 const modelName = 'sfdc_ai__DefaultGPT4Omni';
-//const modelName = 'sfdc_ai__DefaultOpenAIGPT4OmniMini';
 // --- Token ---
+const consumer_key = 'your-key';
+const consumer_secret = 'your-secret';
 
 app.use(express.static('public'));
-app.use(bodyParser.json()); // Use to parse JSON body
+app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.post('/submit', async (req, res) => {
-  const userPrompt = req.body.prompt; // Get the prompt from the request body
-  const userModel = req.body.model;
+  const userPrompt = req.body.prompt; // Get the prompt entered
+  const userModel = req.body.model; // Get the model selected
   console.log("userPrompt: ", userPrompt);
   console.log("userModel: ", userModel);
 
@@ -48,8 +43,7 @@ app.post('/submit', async (req, res) => {
           }        
       });
       
-      accessToken = response.data.access_token; // Declare and assign accessToken here
-      //console.log("accessToke: ", accessToken);
+      accessToken = response.data.access_token; // Declare token var and assign accessToken here
   } catch (error) {        
       console.error(error);        
       return res.status(500).send('Error requesting token');    
@@ -62,7 +56,7 @@ app.post('/submit', async (req, res) => {
   try {
       // Set input Prompt var 
       const data = {
-          prompt: req.body.prompt // Adjust the key as needed based on API requirements
+          prompt: req.body.prompt
       };
       
       const response = await axios.post(generationURL, data, {            
@@ -70,19 +64,18 @@ app.post('/submit', async (req, res) => {
               'Content-Type': 'application/json;charset=utf-8',
               'x-client-feature-id':'ai-platform-models-connected-app',
               'x-sfdc-app-context':'EinsteinGPT',
-              'Authorization': `Bearer ${accessToken}` // Use the accessToken here
+              'Authorization': `Bearer ${accessToken}`
               
           }        
       });
       
-      //console.log('Response:', response.data);
   
       const generatedResponse = response.data.generation.generatedText;
       console.log('generatedResponse:', generatedResponse);
       console.log('Generation contentQuality: ', JSON.stringify(response.data.generation.contentQuality, null, 2));
       console.log('totalTokens', response.data.parameters.usage.total_tokens);
       console.log('userModel', response.data.parameters.model);
-      //return res.status(200).json(response.data); // Send the response here
+
       return res.status(200).json({
         response: {
             data: {
@@ -112,8 +105,7 @@ app.post('/submit', async (req, res) => {
 });
 
 
-app.get('/request-token', async (req, res) => {    
-  //const { my_domain, consumer_key, consumer_secret } = req.body;    
+app.get('/request-token', async (req, res) => {      
   if (!my_domain || !consumer_key || !consumer_secret) {        
       return res.status(400).send('Missing required parameters');    
   }    
