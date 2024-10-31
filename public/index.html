@@ -3,6 +3,10 @@
 <head>
   <title>Einstein Trust Layer</title>
   <link rel="stylesheet" type="text/css" href="/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-json.min.js"></script>
 </head>
 <body>
 
@@ -14,7 +18,14 @@
     <br>
     <form id="promptForm">
       <div class="prompt-textarea">
-        <textarea name="prompt" placeholder="Enter prompt here" required rows="4" cols="50"></textarea>
+        <textarea 
+          name="prompt" 
+          id="promptInput"
+          placeholder="Enter prompt here" 
+          required 
+          minlength="1"
+          rows="4" 
+          cols="50"></textarea>
       </div>
       <br>
       <label for="model">Model:</label>
@@ -27,7 +38,10 @@
     </select>
     <br><br>
     <div class="submit-button">
-      <button type="submit">Submit</button>
+      <button type="submit" id="submitButton">
+        <span id="submitText">Submit</span>
+        <span id="submitSpinner" class="spinner" style="display: none;"></span>
+      </button>
     </div>
       
     </form>
@@ -42,17 +56,17 @@
 
     <!-- Response Tab -->
     <div id="ResponseTab" class="tabcontent active">
-      <textarea id="response1" name="response" rows="10" cols="50" readonly>Response here</textarea>
+      <div id="response1" class="markdown-content"></div>
     </div>
 
     <!-- Log Tab -->
     <div id="LogTab" class="tabcontent">
-      <textarea id="responselog1" name="responselog" rows="10" cols="50" readonly>Log information will appear here</textarea>
+      <div id="responselog1" class="markdown-content"></div>
     </div>
 
     <!-- Request Tab -->
     <div id="RequestTab" class="tabcontent">
-      <textarea id="responseRequest1" name="responserequest" rows="10" cols="50" readonly>Request details will appear here</textarea>
+      <div id="responseRequest1" class="markdown-content"></div>
     </div>
   </div>
 
@@ -61,13 +75,33 @@
   </div>
 
   <script>
+    const promptInput = document.getElementById('promptInput');
+    const submitButton = document.getElementById('submitButton');
+    const submitText = document.getElementById('submitText');
+    const submitSpinner = document.getElementById('submitSpinner');
+    
+    // Disable submit button initially if textarea is empty
+    submitButton.disabled = !promptInput.value.trim();
+    
+    // Add input event listener to textarea
+    promptInput.addEventListener('input', function() {
+        submitButton.disabled = !this.value.trim();
+    });
+
     document.getElementById('promptForm').addEventListener('submit', function(event) {
       event.preventDefault();
+      
+      const prompt = promptInput.value.trim();
+      if (!prompt) {
+        return; // Extra safety check
+      }
 
-      const prompt = this.prompt.value;
+      submitButton.disabled = true;
+      submitText.style.display = 'none';
+      submitSpinner.style.display = 'inline-block';
+
       const model = this.model.value;
 
-      // Send the prompt to the server
       fetch('/submit', {
         method: 'POST',
         headers: {
@@ -77,22 +111,38 @@
       })
       .then(response => response.json())
       .then(data => {
-        // Response Tab - Display Response
-        document.getElementById('response1').value = data.response.data.generation.generatedText;
+        // Response Tab - Display Response as Markdown
+        const markdownContent = data.response.data.generation.generatedText;
+        document.getElementById('response1').innerHTML = marked.parse(markdownContent);
 
-        // Log Tab - Display Log Data
-        const responselogResult = `userModel: ${data.response.data.parameters.userModel}\n\n` +
-                      `totalTokens: ${data.response.data.parameters.totalTokens}\n\n` +
-                      `contentQuality: ${JSON.stringify(data.response.data.generation.contentQuality, null, 2)}`;
-        document.getElementById('responselog1').value = responselogResult;
+        // Log Tab - Display Log Data as Markdown code block
+        const logContent = `\`\`\`json\n${JSON.stringify({
+          userModel: data.response.data.parameters.userModel,
+          totalTokens: data.response.data.parameters.totalTokens,
+          contentQuality: data.response.data.generation.contentQuality
+        }, null, 2)}\n\`\`\``;
+        document.getElementById('responselog1').innerHTML = marked.parse(logContent);
 
-        // Request Tab - Display POST Request
-        const requestBody = JSON.stringify({ prompt: prompt, model: model }, null, 2);
-        document.getElementById('responseRequest1').value = `Request URL: ${data.response.data.request.generationURL}\n\nRequest Body:\n${requestBody}`;
+        // Request Tab - Display POST Request as Markdown code block
+        const requestContent = `### Request URL\n\`${data.response.data.request.generationURL}\`\n\n### Request Body\n\`\`\`json\n${JSON.stringify({ 
+          prompt: prompt, 
+          model: model 
+        }, null, 2)}\n\`\`\``;
+        document.getElementById('responseRequest1').innerHTML = marked.parse(requestContent);
+
+        // Trigger Prism to highlight all code blocks
+        Prism.highlightAll();
       })
       .catch(error => {
         console.error('Error:', error);
-        document.getElementById('logTextArea').value = "Error: " + error;
+        const errorContent = `\`\`\`\nError: ${error}\n\`\`\``;
+        document.getElementById('responselog1').innerHTML = marked.parse(errorContent);
+        Prism.highlightAll();
+      })
+      .finally(() => {
+        submitButton.disabled = !promptInput.value.trim(); // Only enable if there's text
+        submitText.style.display = 'inline';
+        submitSpinner.style.display = 'none';
       });
     });
 

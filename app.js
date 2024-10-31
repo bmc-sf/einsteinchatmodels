@@ -2,20 +2,20 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const https = require('https');
 const axios = require('axios');
+require('dotenv').config(); 
 
 const hostname = '127.0.0.1';
-const port = 4043;  //localhost
-//const port = process.env.PORT;  //heroku
+const PORT = process.env.PORT || 3000;
 
 const app = express();
 
 // --- Domain ---
-const my_domain = 'your-domain';
+const my_domain = process.env.SF_LOGIN_URL;
 // --- Default Model ---
 const modelName = 'sfdc_ai__DefaultGPT4Omni';
 // --- Token ---
-const consumer_key = 'your-key';
-const consumer_secret = 'your-secret';
+const consumer_key = process.env.SF_CONSUMER_KEY;
+const consumer_secret = process.env.SF_CONSUMER_SECRET;
 
 app.use(express.static('public'));
 app.use(bodyParser.json());
@@ -32,7 +32,7 @@ app.post('/submit', async (req, res) => {
       return res.status(400).send('Missing required parameters');    
   }
 
-  const tokenURL = `https://${my_domain}/services/oauth2/token`;    
+  const tokenURL = `${my_domain}/services/oauth2/token`;    
   const data = `grant_type=client_credentials&client_id=${consumer_key}&client_secret=${consumer_secret}`;    
   let accessToken;
 
@@ -110,7 +110,7 @@ app.get('/request-token', async (req, res) => {
       return res.status(400).send('Missing required parameters');    
   }    
   
-  const tokenURL = `https://${my_domain}/services/oauth2/token`;    
+  const tokenURL = `${my_domain}/services/oauth2/token`;    
   const data = `grant_type=client_credentials&client_id=${consumer_key}&client_secret=${consumer_secret}`;    
     try {        
         const response = await axios.post(tokenURL, data, {            
@@ -129,9 +129,6 @@ app.get('/request-token', async (req, res) => {
   );
 
 // Start the server
-app.listen(port, () => {
-    // Localhost
-    console.log(`Server is running at http://${hostname}:${port}`);
-    // Heroku
-    //console.log(`Server is running at port ${port}`);
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
 });
