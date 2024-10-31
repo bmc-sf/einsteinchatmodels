@@ -9,7 +9,8 @@ const https = require('https');
 const axios = require('axios');
 
 const hostname = '127.0.0.1';
-const port = 4043;
+const port = 4043;  //localhost
+//const port = process.env.PORT;  //heroku
 
 const app = express();
 
@@ -137,5 +138,8 @@ app.get('/request-token', async (req, res) => {
 
 // Start the server
 app.listen(port, () => {
+    // Localhost
     console.log(`Server is running at http://${hostname}:${port}`);
+    // Heroku
+    //console.log(`Server is running at port ${port}`);
 });
