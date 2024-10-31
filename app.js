@@ -2,20 +2,20 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const https = require('https');
 const axios = require('axios');
+require('dotenv').config(); 
 
 const hostname = '127.0.0.1';
-const port = 4043;  //localhost
-//const port = process.env.PORT;  //heroku
+const port = process.env.PORT || 4043;
 
 const app = express();
 
 // --- Domain ---
-const my_domain = 'your-domain';
+const my_domain = process.env.SF_LOGIN_URL;
 // --- Default Model ---
 const modelName = 'sfdc_ai__DefaultGPT4Omni';
 // --- Token ---
-const consumer_key = 'your-key';
-const consumer_secret = 'your-secret';
+const consumer_key = process.env.SF_CONSUMER_KEY;
+const consumer_secret = process.env.SF_CONSUMER_SECRET;
 
 app.use(express.static('public'));
 app.use(bodyParser.json());
@@ -130,8 +130,5 @@ app.get('/request-token', async (req, res) => {
 
 // Start the server
 app.listen(port, () => {
-    // Localhost
-    console.log(`Server is running at http://${hostname}:${port}`);
-    // Heroku
-    //console.log(`Server is running at port ${port}`);
+    console.log(`Server is running at port ${port}`);
 });
