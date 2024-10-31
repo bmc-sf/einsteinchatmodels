@@ -32,7 +32,7 @@ app.post('/submit', async (req, res) => {
       return res.status(400).send('Missing required parameters');    
   }
 
-  const tokenURL = `https://${my_domain}/services/oauth2/token`;    
+  const tokenURL = `${my_domain}/services/oauth2/token`;    
   const data = `grant_type=client_credentials&client_id=${consumer_key}&client_secret=${consumer_secret}`;    
   let accessToken;
 
@@ -110,7 +110,7 @@ app.get('/request-token', async (req, res) => {
       return res.status(400).send('Missing required parameters');    
   }    
   
-  const tokenURL = `https://${my_domain}/services/oauth2/token`;    
+  const tokenURL = `${my_domain}/services/oauth2/token`;    
   const data = `grant_type=client_credentials&client_id=${consumer_key}&client_secret=${consumer_secret}`;    
     try {        
         const response = await axios.post(tokenURL, data, {            
